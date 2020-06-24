@@ -5,6 +5,7 @@ import PackageDescription
 let package = Package(name: "VCDISamples",
                       products: [
                           .library(name: "VCDI_Darwin",
+                                   type: .dynamic,
                                    targets: [
                                        "VCDI_Darwin",
                                    ]),
