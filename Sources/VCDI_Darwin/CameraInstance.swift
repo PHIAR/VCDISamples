@@ -113,9 +113,20 @@ internal final class CameraInstance: NSObject,
         dispatchPrecondition(condition: .onQueue(self.executionQueue))
 
         guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
-
             return
         }
+
+        let _ = CVPixelBufferLockBaseAddress(pixelBuffer, .readOnly)
+        let pointer = CVPixelBufferGetBaseAddress(pixelBuffer)!
+        let size = CVPixelBufferGetDataSize(pixelBuffer)
+
+        for callback in self.callbacks {
+            callback.callback(callback.context,
+                              pointer,
+                              size)
+        }
+
+        let _ = CVPixelBufferUnlockBaseAddress(pixelBuffer, .readOnly)
     }
 }
 
